@@ -20,7 +20,7 @@ type SQLPreparationError struct {
 }
 
 func (e *SQLPreparationError) Error() string {
-	return fmt.Sprintf("SQL command preparation failed: %v", e.Internal)
+	return fmt.Sprintf("SQL preparation: %v", e.Internal)
 }
 
 type SQLExecutionError struct {
@@ -28,7 +28,7 @@ type SQLExecutionError struct {
 }
 
 func (e *SQLExecutionError) Error() string {
-	return fmt.Sprintf("SQL command execution failed: %v", e.Internal)
+	return fmt.Sprintf("SQL execution: %v", e.Internal)
 }
 
 type DBConnectionError struct {
@@ -36,15 +36,7 @@ type DBConnectionError struct {
 }
 
 func (e *DBConnectionError) Error() string {
-	return fmt.Sprintf("Database connection failed: %v", e.Internal)
-}
-
-type DatabasePathError struct {
-	Internal error
-}
-
-func (e *DatabasePathError) Error() string {
-	return fmt.Sprintf("database path error: %v", e.Internal)
+	return fmt.Sprintf("Database connection: %v", e.Internal)
 }
 
 // OpenDatabase opens the SQLite database located at the provided path.
@@ -60,7 +52,7 @@ func GetDatabasePath() (string, error) {
 	var dbPath string
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		return "", &DatabasePathError{Internal: err}
+		return "", &DBConnectionError{Internal: err}
 	}
 
 	switch runtime.GOOS {
@@ -73,12 +65,12 @@ func GetDatabasePath() (string, error) {
 	case "freebsd", "openbsd", "netbsd":
 		dbPath = filepath.Join(homeDir, ".config", appinfo.AppName, "database.db")
 	default:
-		return "", &DatabasePathError{Internal: fmt.Errorf("unsupported operating system")}
+		return "", &DBConnectionError{Internal: fmt.Errorf("unsupported operating system")}
 	}
 
 	// Check if the file exists
 	if _, err := os.Stat(dbPath); err != nil {
-		return "", &DatabasePathError{Internal: err}
+		return "", &DBConnectionError{Internal: err}
 	}
 
 	return dbPath, nil

@@ -2,6 +2,7 @@ package chartcommand
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/EdgeLordKirito/ChartMaster/internal/chartvalidation"
 	"github.com/EdgeLordKirito/ChartMaster/internal/dbutils"
@@ -126,9 +127,8 @@ func ReadCommand(cmd *cobra.Command, args []string) error {
 		return &dbutils.SQLExecutionError{Internal: err}
 	}
 
-	// Save the retrieved BLOB data as needed (you can handle it here)
-	// Example:
-	// someGlobalVariable = data
+	content := string(data)
+	fmt.Println(content)
 
 	return nil
 }
@@ -210,9 +210,10 @@ func ListCommand(cmd *cobra.Command, args []string) error {
 		return &dbutils.SQLExecutionError{Internal: err}
 	}
 
-	// Save or use the chartNames slice as needed
-	// Example:
-	// someGlobalVariable = chartNames
+	for i, v := range chartNames {
+		fmt.Printf("%d: %s", i+1, v)
+		fmt.Print("\n")
+	}
 
 	return nil
 }

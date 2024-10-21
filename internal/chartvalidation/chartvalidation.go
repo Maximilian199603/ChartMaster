@@ -14,7 +14,7 @@ type ChartValidationError struct {
 }
 
 func (e *ChartValidationError) Error() string {
-	return fmt.Sprintf("chart could not be validated: %v", e.Internal)
+	return fmt.Sprintf("chart parse: %v", e.Internal)
 }
 
 func ReadAndValidate(filePath string) ([]byte, error) {
