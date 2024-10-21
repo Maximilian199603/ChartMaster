@@ -6,9 +6,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"runtime"
 
-	"github.com/EdgeLordKirito/ChartMaster/cmd/chartmaster/appinfo"
+	"github.com/EdgeLordKirito/ChartMaster/internal/appdomain"
 	_ "github.com/mattn/go-sqlite3" // Import the SQLite driver
 )
 
@@ -43,35 +42,23 @@ func (e *DBConnectionError) Error() string {
 func OpenDatabase(dbPath string) (*sql.DB, error) {
 	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
-		return nil, err
+		return nil, &DBConnectionError{Internal: err}
 	}
 	return db, nil
 }
 
 func GetDatabasePath() (string, error) {
-	var dbPath string
-	homeDir, err := os.UserHomeDir()
+	domainPath, err := appdomain.DomainPath()
 	if err != nil {
-		return "", &DBConnectionError{Internal: err}
+		return "", err
 	}
 
-	switch runtime.GOOS {
-	case "windows":
-		dbPath = filepath.Join(homeDir, "AppData", "Local", appinfo.AppName, "database.db")
-	case "darwin": // macOS
-		dbPath = filepath.Join(homeDir, "Library", "Application Support", appinfo.AppName, "database.db")
-	case "linux":
-		dbPath = filepath.Join(homeDir, ".config", appinfo.AppName, "database.db")
-	case "freebsd", "openbsd", "netbsd":
-		dbPath = filepath.Join(homeDir, ".config", appinfo.AppName, "database.db")
-	default:
-		return "", &DBConnectionError{Internal: fmt.Errorf("unsupported operating system")}
-	}
+	dbPath := filepath.Join(domainPath, "database.db")
 
 	// Check if the file exists
 	if _, err := os.Stat(dbPath); err != nil {
 		return "", &DBConnectionError{Internal: err}
 	}
 
-	return dbPath, nil
+	return domainPath, nil
 }

@@ -28,7 +28,7 @@ func AddCommand(cmd *cobra.Command, args []string) error {
 	}
 	db, err := dbutils.OpenDatabase(dbPath)
 	if err != nil {
-		return &dbutils.DBConnectionError{Internal: err}
+		return err
 	}
 	defer db.Close()
 
@@ -71,7 +71,7 @@ func UpdateCommand(cmd *cobra.Command, args []string) error {
 	}
 	db, err := dbutils.OpenDatabase(dbPath)
 	if err != nil {
-		return &dbutils.DBConnectionError{Internal: err}
+		return err
 	}
 	defer db.Close()
 
@@ -104,7 +104,7 @@ func ReadCommand(cmd *cobra.Command, args []string) error {
 	}
 	db, err := dbutils.OpenDatabase(dbPath)
 	if err != nil {
-		return &dbutils.DBConnectionError{Internal: err}
+		return err
 	}
 	defer db.Close()
 
@@ -144,7 +144,7 @@ func RemoveCommand(cmd *cobra.Command, args []string) error {
 	}
 	db, err := dbutils.OpenDatabase(dbPath)
 	if err != nil {
-		return &dbutils.DBConnectionError{Internal: err}
+		return err
 	}
 	defer db.Close()
 
@@ -175,7 +175,7 @@ func ListCommand(cmd *cobra.Command, args []string) error {
 	}
 	db, err := dbutils.OpenDatabase(dbPath)
 	if err != nil {
-		return &dbutils.DBConnectionError{Internal: err}
+		return err
 	}
 	defer db.Close()
 
