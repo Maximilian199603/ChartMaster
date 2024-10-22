@@ -1,33 +1,22 @@
 package tuicommand
 
 import (
-	"fmt"
+	"errors"
+	"log"
 
+	"github.com/EdgeLordKirito/ChartMaster/internal/tui"
 	"github.com/spf13/cobra"
 )
 
-type WrappedError struct {
-	internal error
-}
-
-func Wrap(input error) *WrappedError {
-	return &WrappedError{internal: input}
-}
-
-func (e *WrappedError) Error() string {
-	return fmt.Sprintf("Wrapping error: %v", e.internal)
-}
-
-func (e *WrappedError) UnWrap() error {
-	return e.internal
-}
-
-func WithCommand(cmd *cobra.Command, args []string) error {
-	chartName := args[0]
-	fmt.Printf("Opening TUI with chart: %s", chartName)
-	return nil
-}
-
-func Run(cmd *cobra.Command, args []string) {
-
+func Run(cmd *cobra.Command, args []string) error {
+	argLength := len(args)
+	if argLength == 0 {
+		log.Println("starting full tui")
+		return tui.FullTui()
+	} else if argLength == 1 {
+		filePath := args[0]
+		log.Printf("opening partial tui with argument '%s'", filePath)
+		return tui.PartialTui(filePath)
+	}
+	return errors.New("too many args")
 }
