@@ -1,15 +1,12 @@
 package tui
 
-import ()
+import "github.com/EdgeLordKirito/TypeStrengthChart/typechart"
 
-func FullTui() error {
-	return nil
-}
-
-func PartialTui(filePath string) error {
-	//validate filepath
-
-	//deserialize file into a chart
+func With(filePath string) error {
+	chart, err := typechart.DeserializeFile(filePath)
+	if err != nil {
+		return err
+	}
 
 	// use chart in model
 	return nil

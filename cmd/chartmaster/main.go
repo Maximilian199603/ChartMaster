@@ -46,7 +46,7 @@ func tuiCommand() *cobra.Command {
 		Use:   "tui",
 		Short: "Command for opening the TUI",
 		Long:  "tui opens the TUI of " + appinfo.AppName,
-		Args:  cobra.MaximumNArgs(1),
+		Args:  cobra.ExactArgs(1),
 		RunE:  tuicommand.Run,
 	}
 
