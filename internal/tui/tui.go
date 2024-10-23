@@ -180,7 +180,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 // the table models View function needed by the tea.Model interface
 func (m model) View() string {
-	return typeCombiPrint(m.typeCombi) + "\n" + m.table.View() + "\n press 'q' to quit.\n"
+	//return typeCombiPrint(m.typeCombi) + "\n" + m.table.View() + "\n press 'q' to quit.\n"
+
+	return m.table.View() + "\n press 'q' to quit.\n"
 }
 
 // Mark: internal Table Helper functions
