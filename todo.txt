@@ -1,0 +1,2 @@
+cleanup code
+remove logging
