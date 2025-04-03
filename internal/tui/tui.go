@@ -35,13 +35,11 @@ func With(filePath string) error {
 	}
 
 	weaknessTable := typechart.NewWeaknesstable(*chart, typeSelection...)
-
 	presentabletable := buildTable(*weaknessTable, typeSelection...)
 	p := tea.NewProgram(presentabletable)
 	if _, err := p.Run(); err != nil {
 		log.Fatal(err)
 	}
-	// err is nil
 	return err
 }
 
